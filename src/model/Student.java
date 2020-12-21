@@ -3,29 +3,32 @@ package model;
 import java.io.Serializable;
 
 public class Student implements Serializable {
-    final long serialVersionUID = 1L;
-    String maSv;
-    String hovaten;
-    String IP;
-    int group;
+    private static final long serialVersionUID = 1L;
+    private String maSV;
+    private String hovaten;
+    private String IP;
+    private int group;
 
-    public Student(String maSv, String hovaten, String IP, int group) {
-        this.maSv = maSv;
+    public Student(String maSV, String hovaten, String IP, int group) {
+        this.maSV = maSV;
         this.hovaten = hovaten;
         this.IP = IP;
         this.group = group;
     }
 
-    public long getSerialVersionUID() {
+    public Student() {
+    }
+
+    public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public String getMaSv() {
-        return maSv;
+    public String getMaSV() {
+        return maSV;
     }
 
-    public void setMaSv(String maSv) {
-        this.maSv = maSv;
+    public void setMaSV(String maSV) {
+        this.maSV = maSV;
     }
 
     public String getHovaten() {
@@ -55,8 +58,7 @@ public class Student implements Serializable {
     @Override
     public String toString() {
         return "Student{" +
-                "serialVersionUID=" + serialVersionUID +
-                ", maSv='" + maSv + '\'' +
+                "maSV='" + maSV + '\'' +
                 ", hovaten='" + hovaten + '\'' +
                 ", IP='" + IP + '\'' +
                 ", group=" + group +
