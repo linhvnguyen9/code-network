@@ -1,14 +1,9 @@
-import control.IRegistration;
+import control.IRMIServer;
 import lombok.SneakyThrows;
-import model.Answer;
+import model.ServerConfiguration;
 import model.Student;
 
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,25 +12,29 @@ public class Main {
 
     @SneakyThrows
     public static void main(String[] args) {
-        IRegistration service = (IRegistration) Naming.lookup("rmi://10.170.77.34:1099/Server");
+        IRMIServer service = (IRMIServer) Naming.lookup("rmi://localhost:1099/Server");
+        System.out.println("Connection success!");
         Student student = new Student("B17DCCN436", "Le Vu Nam", "10.170.77.38.", 2);
-        Student response = service.register(student);
-        System.out.println(response.toString());
+        ServerConfiguration config = new ServerConfiguration(0,0,0,0);
 
-        int ucln = USCLN(response.getNumericCode3(), response.getNumericCode4());
-        int bcnn = BSCNN(response.getNumericCode3(), response.getNumericCode4(), ucln);
-        int max = getMaxValue(response.getNumericExam());
+        ServerConfiguration response1 = service.getObjectServerDes(student, config);
+//        ServerConfiguration response2 = service.get
+        System.out.println(response1.toString());
 
-        Answer answer = new Answer();
-        answer.setStudent(response);
-        answer.setReverseStringAnswer(reverseString(response.getStrExamCode1()));
-        answer.setNormalizationStringAnswer(capitalize(response.getStrExamCode2()));
-        answer.setUclnNumericAnswer(ucln);
-        answer.setBcnnNumericAnswer(bcnn);
-        answer.setMaxNumericAnswer(max);
+//        int ucln = USCLN(response.getNumericCode3(), response.getNumericCode4());
+//        int bcnn = BSCNN(response.getNumericCode3(), response.getNumericCode4(), ucln);
+//        int max = getMaxValue(response.getNumericExam());
+//
+//        Answer answer = new Answer();
+//        answer.setStudent(response);
+//        answer.setReverseStringAnswer(reverseString(response.getStrExamCode1()));
+//        answer.setNormalizationStringAnswer(capitalize(response.getStrExamCode2()));
+//        answer.setUclnNumericAnswer(ucln);
+//        answer.setBcnnNumericAnswer(bcnn);
+//        answer.setMaxNumericAnswer(max);
 
-        Answer result = service.answer(answer);
-        System.out.println(result.toString());
+//        Answer result = service.answer(answer);
+//        System.out.println(result.toString());
     }
 
     public static String reverseString(String s){
@@ -51,7 +50,6 @@ public class Main {
                 .map(Main::capitalizeString)
                 .collect(Collectors.joining(" "));
 
-        System.out.println("RESULT: " + result);
         return result;
     }
 
