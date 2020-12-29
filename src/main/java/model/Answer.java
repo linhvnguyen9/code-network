@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Answer implements Serializable {
     static final long serialVersionUID = 2L;
@@ -79,6 +80,7 @@ public class Answer implements Serializable {
     }
 
     public boolean updateAnswer(int code, Object answer, boolean isRight) {
+        System.out.println("RIGHT: " + isRight);
         this.answers[code] = answer;
         this.isRights[code] = isRight;
         if (this.viewString == null) {
@@ -101,5 +103,17 @@ public class Answer implements Serializable {
             System.err.println("Chua co sinh vien nay !");
             return false;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Answer{" +
+            "student=" + student +
+            ", answers=" + Arrays.toString(answers) +
+            ", isRights=" + Arrays.toString(isRights) +
+            ", viewString=" + Arrays.toString(viewString) +
+            ", alreadyRegistration=" + alreadyRegistration +
+            ", questions=" + Arrays.toString(questions) +
+            '}';
     }
 }

@@ -43,7 +43,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 public class ClientList extends JFrame {
     DefaultTableModel model;
-    private String[] columnNames = new String[]{"Số TT", "Mã SV", "Họ và Tên", "IP", "Nhóm", "Đăng ký", "CAESAR", "SecondChar", "-", "USCLN", "Prime"};
+    private String[] columnNames = new String[]{"Số TT", "Mã SV", "Họ và Tên", "IP", "Nhóm", "Đăng ký", "CAESAR", "SecondChar", "Tách chuỗi", "USCLN", "Prime"};
     private Object[][] data;
     private JMenu jMenu1;
     private JMenu jMenu2;

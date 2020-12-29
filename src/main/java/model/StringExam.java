@@ -96,6 +96,8 @@ public class StringExam {
                     return this.stringOrg.split(" ").length == this.numericAnswer && this.stringAnswer.equals(this.reverseEachWordInString(this.stringOrg));
                 case 11:
                     return this.charAnswer == this.get2ndMostFreq(this.stringOrg);
+                case 12:
+                    return this.stringAnswer.equals(this.substring(this.stringOrg, 1, 6));
             }
         }
     }
@@ -228,6 +230,10 @@ public class StringExam {
         }
 
         return count;
+    }
+
+    public String substring(String str, int start, int end){
+        return str.substring(start, end);
     }
 
     private int countSpecialChar() {

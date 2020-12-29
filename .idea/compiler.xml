@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="lap-trinh-mang-Socket" />
+        <module name="Socket-server-final" />
       </profile>
     </annotationProcessing>
   </component>

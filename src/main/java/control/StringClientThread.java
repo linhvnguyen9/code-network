@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +50,7 @@ public class StringClientThread extends Thread {
     }
 
     private void checkResponse() throws IOException {
+        System.out.println("GET: " + this.stringExam.getCode());
         switch(this.stringExam.getCode()) {
             case 1:
                 this.stringExam.setNumericAnswer(this.is.readInt());
@@ -92,21 +94,17 @@ public class StringClientThread extends Thread {
             case 9:
                 this.stringExam.setNumericAnswer(this.is.readInt());
                 this.stringExam.setStringAnswer(this.is.readUTF());
-                System.out.println("xau goc la :" + this.stringExam.getStringOrg());
-                System.out.println("Xau có từ đảo ngược :" + this.stringExam.getStringAnswer());
-                System.out.println("Số từ là :" + this.stringExam.getNumericAnswer());
                 this.answer.updateAnswer(0, this.stringExam.getStringAnswer(), this.stringExam.isRightAnswer());
                 break;
             case 10:
-                this.stringExam.setStringAnswer(this.is.readUTF());
+                String str = this.is.readUTF();
+                this.stringExam.setStringAnswer(str);
                 String[] strs = this.stringExam.getStringOrg().trim().split(" ");
                 String strAnswer = "";
 
-                for(int i = 0; i < strs.length; ++i) {
-                    String word = strs[i];
-
-                    for(int j = 0; j < word.length(); ++j) {
-                        strAnswer = strAnswer + (char)(word.charAt(j) + Integer.valueOf(this.student.getMaSV().trim().substring(this.student.getMaSV().trim().length() - 1)));
+                for (String word : strs) {
+                    for (int j = 0; j < word.length(); ++j) {
+                        strAnswer = strAnswer + (char) (word.charAt(j) + Integer.parseInt(this.student.getMaSV().trim().substring(this.student.getMaSV().trim().length() - 1)));
                     }
 
                     strAnswer = strAnswer + " ";
@@ -114,12 +112,21 @@ public class StringClientThread extends Thread {
 
                 strAnswer = strAnswer.trim();
                 this.answer.updateAnswer(0, this.stringExam.getStringAnswer(), strAnswer.equals(this.stringExam.getStringAnswer()));
-                break;
+                System.out.println(answer.toString());
             case 11:
                 this.stringExam.setCharAnswer(this.is.readChar());
                 this.answer.updateAnswer(1, this.stringExam.getCharAnswer(), this.stringExam.isRightAnswer());
+
+            case 12:
+                String str1 = this.is.readUTF();
+                this.stringExam.setStringAnswer(str1);
+                this.answer.updateAnswer(2, this.stringExam.getStringAnswer(), this.stringExam.equals(this.substring("this.stringExam 123", 1, 6)));
         }
 
+    }
+
+    public String substring(String str, int start, int end){
+        return str.substring(start, end);
     }
 
     public void run() {
@@ -129,32 +136,47 @@ public class StringClientThread extends Thread {
             this.os = new DataOutputStream(this.clientSocket.getOutputStream());
             this.is = new DataInputStream(this.clientSocket.getInputStream());
             if (this.initiateStudentAnswer()) {
-                int code = (new Random()).nextInt(2);
-                this.os.writeInt(code);
-                if (code == 0) {
+//                int code = (new Random()).nextInt(2);
+                int code = this.is.readInt();
+                if (code == 1) {
+                    //second char
                     this.stringExam.stringGenerate(11);
                     this.os.writeUTF(this.stringExam.getStringOrg());
                     this.checkResponse();
+
+                    //substring
+                    this.os.writeUTF("this.stringExam 123");
+                    this.os.writeInt(1);
+                    this.os.writeInt(6);
+                    this.checkResponse();
+
+                    //ceasar
                     this.stringExam.stringGenerate(10);
                     this.os.writeUTF(this.stringExam.getStringOrg());
-                    this.os.writeInt(Integer.valueOf(this.student.getMaSV().trim().substring(this.student.getMaSV().trim().length() - 1)));
+                    this.os.writeInt(Integer.parseInt(this.student.getMaSV().trim().substring(this.student.getMaSV().trim().length() - 1)));
                     this.checkResponse();
-                } else if (code == 1) {
+                } else if (code == 0) {
+                    //ceasar
                     this.stringExam.stringGenerate(10);
                     this.os.writeUTF(this.stringExam.getStringOrg());
-                    this.os.writeInt(Integer.valueOf(this.student.getMaSV().trim().substring(this.student.getMaSV().trim().length() - 1)));
+                    this.os.writeInt(Integer.parseInt(this.student.getMaSV().trim().substring(this.student.getMaSV().trim().length() - 1)));
                     this.checkResponse();
+
+                    //substring
+                    this.os.writeUTF("this.stringExam 123");
+                    this.os.writeInt(1);
+                    this.os.writeInt(6);
+                    this.checkResponse();
+
+                    //second char
                     this.stringExam.stringGenerate(11);
                     this.os.writeUTF(this.stringExam.getStringOrg());
                     this.checkResponse();
                 }
 
                 this.objectStream.writeObject(this.answer);
-                String ack = this.is.readUTF();
-                if (ack.equalsIgnoreCase("ok")) {
-                    this.serverControl.updateAnswerList(this.answer);
-                    this.serverControl.updateView(this.student);
-                }
+                this.serverControl.updateAnswerList(this.answer);
+                this.serverControl.updateView(this.student);
 
                 return;
             }

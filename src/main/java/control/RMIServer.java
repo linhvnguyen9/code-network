@@ -9,6 +9,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class RMIServer extends UnicastRemoteObject implements IRMIServer {
     ArrayList<Student> studentGetDesList = new ArrayList();
@@ -37,6 +38,25 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer {
         reg.rebind("Ca2_Server", this);
     }
 
+    @Override
+    public ServerConfiguration getObjectServerDes(Student student, ServerConfiguration config) throws RemoteException {
+        if (this.studentGetDesList == null) {
+            this.studentGetDesList = new ArrayList();
+        }
+
+        if (student.getMaSV() != null && !student.getMaSV().trim().equalsIgnoreCase("")) {
+            if (!this.isExist(student.getMaSV())) {
+                this.studentGetDesList.add(student);
+            }
+
+            config.setObjectServerPort(11050);
+            config.setCode((new Random()).nextInt(2));
+            return config;
+        } else {
+            return null;
+        }
+    }
+
     public synchronized ServerConfiguration getStringServerDes(Student student, ServerConfiguration config) throws RemoteException {
         if (this.studentGetDesList == null) {
             this.studentGetDesList = new ArrayList();
@@ -48,7 +68,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer {
             }
 
             config.setStringServerPort(11001);
-            config.setCode(Integer.valueOf(student.getMaSV().trim().charAt(student.getMaSV().length() - 1)) % 2);
+            config.setCode((new Random()).nextInt(2));
             return config;
         } else {
             return null;
@@ -66,7 +86,7 @@ public class RMIServer extends UnicastRemoteObject implements IRMIServer {
             }
 
             config.setNumericServerPort(11002);
-            config.setCode(Integer.valueOf(student.getMaSV().trim().charAt(student.getMaSV().length() - 1)) % 2);
+            config.setCode((new Random()).nextInt(2));
             return config;
         } else {
             return null;

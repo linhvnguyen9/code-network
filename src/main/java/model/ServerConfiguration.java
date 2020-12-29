@@ -8,6 +8,7 @@ public class ServerConfiguration implements Serializable {
     int rmiPort = 0;
     int stringServerPort = 0;
     int numericServerPort = 0;
+    int objectServerPort = 0;
     int code = 0;
 
     public ServerConfiguration() {
@@ -51,5 +52,13 @@ public class ServerConfiguration implements Serializable {
 
     public void setNumericServerPort(int numericServerPort) {
         this.numericServerPort = numericServerPort;
+    }
+
+    public int getObjectServerPort() {
+        return objectServerPort;
+    }
+
+    public void setObjectServerPort(int objectServerPort) {
+        this.objectServerPort = objectServerPort;
     }
 }

@@ -69,6 +69,8 @@ public class Final_NumericClientThread extends Thread {
         switch(code) {
             case 1:
                 int uscln = this.is.readInt();
+                System.out.println("UCLN: " + uscln);
+                System.out.println("RESULT: " + this.USCLN(this.A, this.convertString2Num_Ca2(this.str3)));
                 if (this.USCLN(this.A, this.convertString2Num_Ca2(this.str3)) == uscln) {
                     System.out.println("Ket qua: " + uscln + " Dung");
                     this.answer.updateAnswer(3, uscln, true);
@@ -147,6 +149,8 @@ public class Final_NumericClientThread extends Thread {
                 break;
             case 8:
                 boolean isCoPrime_kip23 = this.is.readBoolean();
+                System.out.println("1: " + isCoPrime_kip23);
+                System.out.println("2: " + this.coprime(this.convertString2Num_Ca2(this.str1), this.convertString2Num_Ca2(this.str2)));
                 this.answer.updateAnswer(4, isCoPrime_kip23, isCoPrime_kip23 & this.coprime(this.convertString2Num_Ca2(this.str1), this.convertString2Num_Ca2(this.str2)));
         }
 
@@ -172,32 +176,41 @@ public class Final_NumericClientThread extends Thread {
             this.ioS = new ObjectInputStream(this.clientSocket.getInputStream());
             if (this.initiateStudentAnswer()) {
                 int code = this.is.readInt();
+                System.out.println("CODE: " + code);
                 if (code == 0) {
                     this.str1 = this.randomSpaceNumericString_Ca2(3);
                     this.str2 = this.randomSpaceNumericString_Ca2(3);
                     this.os.writeUTF(this.str1);
                     this.os.writeUTF(this.str2);
+                    System.out.println("Str1: " + str1);
+                    System.out.println("Str2: " + str2);
                     this.checkResponse(8);
                     this.A = (new Random()).nextInt(10) + 100;
                     this.os.writeInt(this.A);
+                    System.out.println("A: " + this.A);
                     this.str3 = this.randomSpaceNumericString_Ca2(3);
                     this.os.writeUTF(this.str3);
+                    System.out.println("Str3: " + this.str3);
                     this.checkResponse(1);
                 } else if (code == 1) {
                     this.A = (new Random()).nextInt(10) + 100;
                     this.os.writeInt(this.A);
+                    System.out.println("A: " + this.A);
                     this.str3 = this.randomSpaceNumericString_Ca2(3);
                     this.os.writeUTF(this.str3);
+                    System.out.println("Str3: " + this.str3);
                     this.checkResponse(1);
                     this.str1 = this.randomSpaceNumericString_Ca2(3);
                     this.str2 = this.randomSpaceNumericString_Ca2(3);
                     this.os.writeUTF(this.str1);
                     this.os.writeUTF(this.str2);
+                    System.out.println("Str1: " + str1);
+                    System.out.println("Str2: " + str2);
                     this.checkResponse(8);
                 }
 
                 this.ooS.writeObject(this.answer);
-                String ack = this.is.readUTF();
+                String ack = "OK";
                 if (ack.equalsIgnoreCase("OK")) {
                     this.serverControl.updateAnswerList(this.answer);
                     this.serverControl.updateView(this.student);
