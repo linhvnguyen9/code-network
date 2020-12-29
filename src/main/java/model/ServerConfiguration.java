@@ -3,11 +3,11 @@ package model;
 import java.io.Serializable;
 
 public class ServerConfiguration implements Serializable {
-    final long serialVersionUID = 2L;
-    int stringServerPort;
-    int numericServerPort;
-    int objectServerPort;
-    int code;
+    private static final long serialVersionUID = 3L;
+    private int stringServerPort;
+    private int numericServerPort;
+    private int objectServerPort;
+    private int code;
 
     public ServerConfiguration(int stringServerPort, int numericServerPort, int objectServerPort, int code) {
         this.stringServerPort = stringServerPort;
