@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class Answer implements Serializable {
-    final long serialVersionUID = 2L;
+    static final long serialVersionUID = 2L;
     Student student;
     Object[] answers;
     boolean[] isRights;
