@@ -13,13 +13,13 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static final String url_local = "127.0.0.1";
-    public static final String url_remote = "10.170.77.16";
+    public static final String url_remote = "172.168.9.226";
     public static final int NO_OF_CHARS = 256;
 
     @SneakyThrows
     public static void main(String[] args) {
         String url = url_local;
-        IRMIServer service = (IRMIServer) Naming.lookup("rmi://127.0.0.1:4444/Ca2_Server");
+        IRMIServer service = (IRMIServer) Naming.lookup(String.format("rmi://%s:4444/Ca2_Server", url));
         Student student = new Student("B17DCCN436", "Le Vu Nam", "10.170.77.11", 2);
         ServerConfiguration config = new ServerConfiguration(0,0,0,0);
 
@@ -163,23 +163,18 @@ public class Main {
     {
         int[] count = new int[NO_OF_CHARS];
         int i;
-        for (i=0; i< str.length(); i++)
+        for (i=0; i< str.length(); i++) {
             (count[str.charAt(i)])++;
-
-        int first = 0, second = 0;
-        for (i = 0; i < NO_OF_CHARS; i++)
-        {
-            if (count[i] > count[first])
-            {
-                second = first;
-                first = i;
-            }
-
-            else if (count[i] > count[second] &&
-                count[i] != count[first])
-                second = i;
         }
 
+        int first = 0, second = 0;
+        for (i = 0; i < NO_OF_CHARS; i++) {
+            if (count[i] > count[first]) {
+                second = first;
+                first = i;
+            } else if (count[i] > count[second] && count[i] != count[first])
+                second = i;
+        }
         return (char) second;
     }
 
@@ -189,7 +184,6 @@ public class Main {
 
         for (char currentChar : chars) {
             if (Character.isLetter(currentChar)) {
-//                int currentCharCode = (int) currentChar - 65;
                 int shiftedCharCode = (int) currentChar + shift;
                 result.append((char) shiftedCharCode);
             } else {
@@ -301,20 +295,6 @@ public class Main {
 
 
     //Bai khac
-    public static Character sortByValueDesc(Map<Character, Integer> map) {
-        List<Map.Entry<Character, Integer>> list = new LinkedList<>(map.entrySet());
-        list.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-
-        return list.get(1).getKey();
-    }
-
-    public static Character sortByValue(HashMap<Character, Integer> hashMap)
-    {
-        List<Map.Entry<Character, Integer> > list = new LinkedList<>(hashMap.entrySet());
-        list.sort(Map.Entry.comparingByValue());
-        return list.get(list.size() - 2).getKey();
-    }
-
     public static String reverseString(String s){
         return new StringBuilder(s).reverse().toString();
     }
@@ -328,8 +308,7 @@ public class Main {
     }
 
     public static String capitalizeString(String s){
-        String s1 = s.substring(0, 1).toUpperCase();
-        return s1 + s.substring(1);
+        return s.replace(s.charAt(0), Character.toUpperCase(s.charAt(0)));
     }
 
     public static int USCLN(int a, int b) {
