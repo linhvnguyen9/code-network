@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public class Main {
 
     public static final String url_local = "127.0.0.1";
-    public static final String url_remote = "172.168.9.226";
+    public static final String url_remote = "192.168.1.60";
     public static final int NO_OF_CHARS = 256;
 
     @SneakyThrows
     public static void main(String[] args) {
-        String url = url_local;
+        String url = url_remote;
         IRMIServer service = (IRMIServer) Naming.lookup(String.format("rmi://%s:4444/Ca2_Server", url));
         Student student = new Student("B17DCCN436", "Le Vu Nam", "10.170.77.11", 2);
         ServerConfiguration config = new ServerConfiguration(0,0,0,0);
@@ -126,7 +126,7 @@ public class Main {
         int sum1 = sumOfNumberInString(xau1);
         int sum2 = sumOfNumberInString(xau2);
 
-        boolean checkNguyenToCungNhau = coprime(sum1, sum2);
+        boolean checkNguyenToCungNhau = coPrime(sum1, sum2);
 
         dos.writeBoolean(checkNguyenToCungNhau);
 
@@ -154,13 +154,12 @@ public class Main {
         int sum1 = sumOfNumberInString(xau1);
         int sum2 = sumOfNumberInString(xau2);
 
-        boolean checkNguyenToCungNhau = coprime(sum1, sum2);
+        boolean checkNguyenToCungNhau = coPrime(sum1, sum2);
 
         dos.writeBoolean(checkNguyenToCungNhau);
     }
 
-    public static Character getSecondMostFreq(String str)
-    {
+    public static Character getSecondMostFreq(String str) {
         int[] count = new int[NO_OF_CHARS];
         int i;
         for (i=0; i< str.length(); i++) {
@@ -193,20 +192,17 @@ public class Main {
         return result.toString();
     }
 
-    private static boolean coprime(int a, int b) {
-        return gcd(a, b) == 1;
+    private static boolean coPrime(int a, int b) {
+        return USCLN(a, b) == 1;
     }
 
-    private static int gcd(int a, int b) {
-        if (a != 0 && b != 0) {
-            if (a == b) {
-                return a;
-            } else {
-                return a > b ? gcd(a - b, b) : gcd(a, b - a);
-            }
-        } else {
-            return 0;
-        }
+    public static int USCLN(int a, int b) {
+        if (b == 0) return a;
+        return USCLN(b, a % b);
+    }
+
+    public static int BSCNN(int a, int b, int c) {
+        return (a * b) / c;
     }
 
     public static int sumOfNumberInString(String str){
@@ -309,15 +305,6 @@ public class Main {
 
     public static String capitalizeString(String s){
         return s.replace(s.charAt(0), Character.toUpperCase(s.charAt(0)));
-    }
-
-    public static int USCLN(int a, int b) {
-        if (b == 0) return a;
-        return USCLN(b, a % b);
-    }
-
-    public static int BSCNN(int a, int b, int c) {
-        return (a * b) / c;
     }
 
     public static int getMaxValue(int[] numbers){
